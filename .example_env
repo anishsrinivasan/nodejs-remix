@@ -1,0 +1,5 @@
+PORT = 8000
+NODE_ENV = development
+
+HTTPS_KEY = certificate/localhost.key
+HTTPS_CERT = certificate/localhost.crt
