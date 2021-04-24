@@ -1,10 +1,12 @@
+import logger from "../core/logger";
+
 export default async ({ httpServer }: { httpServer: any }) => {
   const io = require("socket.io")(httpServer);
   io.on("connection", function (socket: any) {
-    console.log(`New connection: ${socket.id}`);
+    logger.info(`New connection: ${socket.id}`);
     socket.on("disconnect", () =>
-      console.log(`Connection left (${socket.id})`)
+      logger.info(`Connection left (${socket.id})`)
     );
   });
-  console.log("Socket Initialized");
+  logger.info("Socket Initialized");
 };

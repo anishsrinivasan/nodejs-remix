@@ -6,6 +6,7 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import { HTTPS_KEY, HTTPS_CERT, HTTPS_ENABLED } from "./../config";
+import logger from "../core/logger";
 
 export default ({ expressApp }: { expressApp: express.Application }) => {
   let httpServer;
@@ -19,9 +20,9 @@ export default ({ expressApp }: { expressApp: express.Application }) => {
     httpServer = http.createServer(expressApp);
   }
 
-  console.log("\n--- Default Loaders Initiating ---");
+  logger.info("Default Loaders Initiating \n");
   expressLoader({ app: expressApp });
   socketLoader({ httpServer });
-  console.log("--- Default Loaders Initialized---\n");
+  logger.info("Default Loaders Initialized\n");
   return { httpServer };
 };
