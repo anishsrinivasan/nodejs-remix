@@ -5,7 +5,7 @@ import userController from "./userController";
 
 const router = Router();
 
-router.get("/me", middlewares.isAuth(), userController.getCurrentUser);
+router.get("/me", userController.getCurrentUser);
 
 router.get(
   "/valid",

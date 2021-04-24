@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express from "express";
 import loaders from "./loaders";
 import logger from "./core/logger";

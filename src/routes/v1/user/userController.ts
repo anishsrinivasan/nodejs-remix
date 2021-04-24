@@ -1,13 +1,22 @@
 import { successResponse, errorResponse } from "../../../core/apiResponse";
 import { Request, Response } from "express";
+import { Container } from "typedi";
+
+import UserService from "../../../services/User";
 import logger from "../../../core/logger";
+
+const userServiceInstance = Container.get(UserService);
 
 const getCurrentUser = (req: Request, res: Response) => {
   try {
     return res
       .status(200)
       .json(
-        successResponse("Success", { user: req.currentUser }, res.statusCode)
+        successResponse(
+          "Success",
+          userServiceInstance.getUser(),
+          res.statusCode
+        )
       );
   } catch (err) {
     logger.error("User Requested Err", err);
