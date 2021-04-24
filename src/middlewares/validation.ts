@@ -1,6 +1,7 @@
 import Joi from "joi";
 import { pick } from "../helpers";
 import { NextFunction, Request, Response } from "express";
+import apiResponse from "../core/apiResponse";
 
 type ValidationOptions = {
   errorMessage?: string;
@@ -17,19 +18,18 @@ const validation = (
   });
 
   if (error) {
-    const errorMessageValues = error.details
-      .map((details: any) => details.message)
-      .join(", ");
+    // const errorMessageValues = error.details
+    //   .map((details: any) => details.message)
+    //   .join(", ");
+
+    const message =
+      errorMessage && errorMessage !== ""
+        ? errorMessage
+        : "Please Enter the Required values.";
 
     return res
-      .json({
-        code: 422,
-        msg:
-          errorMessage && errorMessage !== ""
-            ? errorMessage
-            : "Please Enter the Required values.",
-      })
-      .status(422);
+      .status(422)
+      .json(apiResponse.errorResponse(message, res.statusCode));
   }
   Object.assign(req, value);
   return next();

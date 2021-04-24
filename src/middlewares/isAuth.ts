@@ -1,5 +1,6 @@
 import jwt from "../core/jwt";
 import { NextFunction, Request, Response } from "express";
+import { errorResponse } from "../core/apiResponse";
 
 const getTokenFromHeader = (req: Request) => {
   /**
@@ -22,7 +23,7 @@ const isAuth = () => async (req: any, res: Response, next: NextFunction) => {
     // const token = req.headers["x-access-token"];
     const token = getTokenFromHeader(req);
     if (!token) {
-      res.status(403).json({ code: 403, msg: "Access Denied" });
+      res.status(403).json(errorResponse("Access Denied", res.statusCode));
       res.end();
       return;
     }
@@ -33,12 +34,15 @@ const isAuth = () => async (req: any, res: Response, next: NextFunction) => {
     if (err.name === "TokenExpiredError") {
       res
         .status(403)
-        .json({ code: 403, msg: "Token Expired, Please try again." });
+        .json(
+          errorResponse("Token Expired, Please try again.", res.statusCode)
+        );
+
       res.end();
       return;
     }
 
-    res.json({ code: 403, msg: "Access Denied", err });
+    res.status(403).json(errorResponse("Access Denied", res.statusCode));
     res.end();
     return;
   }
