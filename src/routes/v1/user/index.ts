@@ -9,7 +9,6 @@ router.get(
   middlewares.isAuth(),
   middlewares.validation(userValidation.createUser),
   (req: Request, res: Response) => {
-    console.log(req.currentUser);
     return res.json({ user: req.currentUser }).status(200);
   }
 );
