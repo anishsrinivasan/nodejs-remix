@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { Algorithm } from "jsonwebtoken";
 dotenv.config();
 
 export const environment = process.env.NODE_ENV || "development";
@@ -26,6 +27,11 @@ export const tokenInfo = {
   ),
   issuer: process.env.TOKEN_ISSUER || "",
   audience: process.env.TOKEN_AUDIENCE || "",
+};
+
+export const jwt: { jwtSecret: string; jwtAlgorithm: Algorithm } = {
+  jwtSecret: process.env.JWT_SECRET || "",
+  jwtAlgorithm: "RS256",
 };
 
 export const logDirectory = process.env.LOG_DIR;
