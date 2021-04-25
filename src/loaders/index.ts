@@ -1,6 +1,8 @@
 import * as express from "express";
 import expressLoader from "./express";
 import socketLoader from "./socket";
+import typeormLoader from "./typeorm";
+
 import http from "http";
 import https from "https";
 import fs from "fs";
@@ -21,6 +23,7 @@ export default ({ expressApp }: { expressApp: express.Application }) => {
   }
 
   logger.info("Default Loaders Initiating \n");
+  typeormLoader({});
   expressLoader({ app: expressApp });
   socketLoader({ httpServer });
   logger.info("Default Loaders Initialized\n");
