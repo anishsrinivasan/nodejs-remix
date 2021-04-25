@@ -3,3 +3,10 @@ NODE_ENV = development
 
 HTTPS_KEY = certificate/localhost.key
 HTTPS_CERT = certificate/localhost.crt
+
+JWT_SECRET = 
+
+DB_PORT = 3306
+DB_USER = 
+DB_PASS = 
+DB_DATABASE = 
