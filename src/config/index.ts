@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
-import { Algorithm } from "jsonwebtoken";
 dotenv.config();
+
+import { Algorithm } from "jsonwebtoken";
 
 export const environment = process.env.NODE_ENV || "development";
 export const PORT = process.env.PORT || 5000;
