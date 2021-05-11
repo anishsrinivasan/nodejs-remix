@@ -1,17 +1,11 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import { User } from "../entity/User";
+import logger from "../core/logger";
 
 export default ({}) => {
   createConnection()
     .then(async (connection) => {
-      console.log("Loading users from the database...");
-      const users = await connection.manager.find(User);
-      console.log("Loaded users: ", users);
-
-      console.log(
-        "Here you can setup and run express/koa/any other framework."
-      );
+      logger.info("DB Established Successful");
     })
-    .catch((error) => console.log(error));
+    .catch((error) => logger.error("typeOrmErr", error));
 };

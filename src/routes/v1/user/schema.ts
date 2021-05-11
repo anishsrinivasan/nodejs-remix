@@ -10,7 +10,10 @@ const signInUserPhoneNumber = {
 const createUser = {
   body: Joi.object().keys({
     display_name: Joi.string().required(),
-    email: Joi.string().email().required(),
+    email: Joi.string()
+      .email()
+      .required()
+      .messages({ "string.any": "Enter a Valid Email" }),
     country_code: Joi.string().required(),
     phone_number: Joi.string().required(),
     img_url: Joi.string().allow("", null),

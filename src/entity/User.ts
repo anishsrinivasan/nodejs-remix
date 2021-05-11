@@ -6,11 +6,17 @@ export class User {
   id: number;
 
   @Column()
-  firstName: string;
+  display_name: string;
 
   @Column()
-  lastName: string;
+  email: string;
 
   @Column()
-  age: number;
+  country_code: string;
+
+  @Column()
+  phone_number: string;
+
+  @Column({ default: "" })
+  image_url: string;
 }

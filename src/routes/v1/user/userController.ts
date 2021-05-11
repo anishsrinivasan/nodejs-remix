@@ -7,14 +7,14 @@ import logger from "../../../core/logger";
 
 const userServiceInstance = Container.get(UserService);
 
-const getCurrentUser = (req: Request, res: Response) => {
+const getCurrentUser = async (req: Request, res: Response) => {
   try {
     return res
       .status(200)
       .json(
         successResponse(
           "Success",
-          userServiceInstance.getUser(),
+          userServiceInstance.getUser("1"),
           res.statusCode
         )
       );
