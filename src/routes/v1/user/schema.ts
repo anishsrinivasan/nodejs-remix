@@ -2,58 +2,47 @@ import Joi from "joi";
 
 const signInUserPhoneNumber = {
   body: Joi.object().keys({
-    country_code: Joi.string().required(),
-    phone_number: Joi.string().required(),
+    countryCode: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
   }),
 };
 
 const createUser = {
   body: Joi.object().keys({
-    display_name: Joi.string().required(),
+    displayName: Joi.string().required(),
     email: Joi.string()
       .email()
       .required()
       .messages({ "string.any": "Enter a Valid Email" }),
-    country_code: Joi.string().required(),
-    phone_number: Joi.string().required(),
-    img_url: Joi.string().allow("", null),
+    countryCode: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    imgURL: Joi.string().allow("", null),
     password: Joi.string().allow(null, ""),
   }),
 };
 
 const createUserWithEmail = {
   body: Joi.object().keys({
-    display_name: Joi.string().required(),
+    displayName: Joi.string().required(),
     email: Joi.string().email().required(),
-    country_code: Joi.string().required(),
-    phone_number: Joi.string().required(),
-    img_url: Joi.string().allow("", null),
+    countryCode: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    imgURL: Joi.string().allow("", null),
     password: Joi.string().required(),
   }),
 };
 
 const updateUser = {
   body: Joi.object().keys({
-    display_name: Joi.string().required(),
+    displayName: Joi.string().required(),
     email: Joi.string().email().required(),
-    country_code: Joi.string().required(),
-    phone_number: Joi.string().required(),
-    img_url: Joi.string().allow("", null),
-    password: Joi.string().allow("", null),
-  }),
-};
-
-const updateUserWithId = {
-  body: Joi.object().keys({
-    display_name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    country_code: Joi.string().required(),
-    phone_number: Joi.string().required(),
-    img_url: Joi.string().allow("", null),
+    countryCode: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    imgURL: Joi.string().allow("", null),
     password: Joi.string().allow("", null),
   }),
   params: Joi.object().keys({
-    id: Joi.string().required(),
+    userId: Joi.string().required(),
   }),
 };
 
@@ -65,16 +54,23 @@ const sendResetPassword = {
 
 const verifyResetPassword = {
   body: Joi.object().keys({
-    otp_verification_id: Joi.string().required(),
-    otp_verify_code: Joi.string().required(),
+    otpVerifyId: Joi.string().required(),
+    otpVerifyCode: Joi.string().required(),
   }),
 };
 
 const resetPassword = {
   body: Joi.object().keys({
-    otp_verification_id: Joi.string().required(),
-    otp_verify_code: Joi.string().required(),
+    otpVerifyId: Joi.string().required(),
+    otpVerifyCode: Joi.string().required(),
     new_password: Joi.string().required(),
+  }),
+};
+
+const deleteUser = {
+  body: Joi.object().keys({}),
+  params: Joi.object().keys({
+    userId: Joi.number().required(),
   }),
 };
 
@@ -83,8 +79,8 @@ export default {
   createUser,
   createUserWithEmail,
   updateUser,
-  updateUserWithId,
   sendResetPassword,
   verifyResetPassword,
   resetPassword,
+  deleteUser,
 };

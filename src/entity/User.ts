@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from "typeorm";
 
 @Entity()
 export class User {
@@ -6,17 +13,26 @@ export class User {
   id: number;
 
   @Column()
-  display_name: string;
+  displayName: string;
 
   @Column()
   email: string;
 
   @Column()
-  country_code: string;
+  countryCode: string;
 
   @Column()
-  phone_number: string;
+  phoneNumber: string;
 
   @Column({ default: "" })
-  image_url: string;
+  imageURL: string;
+
+  @CreateDateColumn()
+  createdAt: number;
+
+  @UpdateDateColumn()
+  updatedAt: number;
+
+  @DeleteDateColumn()
+  deletedAt: number;
 }

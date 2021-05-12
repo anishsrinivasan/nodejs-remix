@@ -1,10 +1,9 @@
 // Helper code for the API consumer to understand the error and handle is accordingly
-import logger from "../core/logger";
 
 export const successResponse = (
   message: string,
-  data: any,
-  statusCode: number
+  statusCode: number,
+  data: any
 ) => {
   return {
     message,
@@ -14,8 +13,17 @@ export const successResponse = (
   };
 };
 
-export const defaultErrorResponse = (statusCode: number = 500) => {
-  return errorResponse("Something Went Wrong, Try again", statusCode, {});
+export const handleRouteCatch = (err: { errCode: number; message: string }) => {
+  const errCode = err.errCode || 500;
+  const message = err.message || "Something went wrong";
+  return { errCode, message };
+};
+
+export const defaultErrorResponse = (
+  message = "Something Went Wrong, Try again",
+  statusCode: number = 500
+) => {
+  return errorResponse(message, statusCode, {});
 };
 
 export const errorResponse = (
@@ -31,7 +39,6 @@ export const errorResponse = (
 
   if (!findCode) statusCode = 500;
   else statusCode = findCode;
-  logger.error(message);
 
   return {
     message,
