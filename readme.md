@@ -57,6 +57,10 @@ cp .example_env .env
 yarn start
 ```
 
+**Note: Update Environement Variables after creating .env to avoid Db Connection Error.**
+
+---
+
 For production environments...
 
 ```sh
