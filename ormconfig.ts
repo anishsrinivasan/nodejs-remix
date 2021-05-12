@@ -9,7 +9,7 @@ export default [
     username: DB_USER,
     password: DB_PASS,
     database: DB_DATABASE,
-    synchronize: true, // False by Default to Avoid Migration Sync with Entity Changes
+    synchronize: false, // False by Default to Avoid Migration Sync with Entity Changes
     migrationsRun: true,
     logging: false,
     entities: ["src/entity/**/*.ts"],
