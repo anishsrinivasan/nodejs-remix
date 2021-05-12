@@ -92,3 +92,4 @@ MIT
 - https://github.com/afteracademy/nodejs-backend-architecture-typescript/
 - https://github.com/aaron5670/ExpressJS-SocketIO-Boilerplate
 - https://scoutapm.com/blog/nodejs-architecture-and-12-best-practices-for-nodejs-development
+- https://dev.to/arjhun777/video-chatting-and-screen-sharing-with-react-node-webrtc-peerjs-18fg
