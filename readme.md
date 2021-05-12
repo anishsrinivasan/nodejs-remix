@@ -1,11 +1,13 @@
 # NodeJS Remix
 
-Build Highly Scalable Backend with NodeJS.
+Build Highly Scalable Backend with Zero Setup on NodeJS.
 
-###### Typescript | Express | TypeORM | JWT | Dependency Injection | mySQL | Mongoose | Postgres
+#### Typescript | Express | TypeORM | JWT | TypeDI | mySQL | Mongoose | Postgres | SocketIO | Winston
 
 \
-It all started as a problem, choosing a good architecture is a real pain and to make matter worse we have multiple options to choose from, There are around hundreds or thousands of boilerplates which are widely available and each follow different pattern, so we started to study and learn the best practices which has been used by top frameworks & boilerplates and also maintaing a good generic coding practices such as DRY, KISS, S.O.L.I.D to come up with something simple, clean framework and with an only intention to make the developer's life easier.
+It all started as a problem, choosing a good architecture is a real pain and to make matter worse we have multiple options to choose from, There are around hundreds or thousands of boilerplates which are widely available and each follows a different pattern, so we have been researching and coming up with highly scalable architecture with best practices by both experience & by hands-on with top frameworks and also maintaining a good generic coding practice such as DRY, KISS, S.O.L.I.D to come up with something simple, clean framework and with support for essential stuff like User Management, Access Roles, Reset Passwords, OTP Verification, Payment Integration so that people can give priority on their use cases & problem-solving.
+
+The goal is to make the developer's life easier so that they can focus more on centering a div. (CSS)
 
 ## Features
 
@@ -23,8 +25,9 @@ It all started as a problem, choosing a good architecture is a real pain and to 
 - Clean Code & Easy Readability
 - Write Asynchronous Code
 - Configuration files and Environment Variables
-- Testing, Logging & Error Handling
+- Logging & Error Handling
 - Dependency Injection
+- Unit Testing (Work In Progress)
 
 ## Tech
 
@@ -68,11 +71,6 @@ npm install --production
 NODE_ENV=production node app
 ```
 
-## Development
-
-Want to contribute? Great!
-Feel free to raise bugs & PRs.
-
 #### Building for source
 
 For production release:
@@ -81,10 +79,26 @@ For production release:
 yarn build
 ```
 
+## Roadmap
+
+- JWT Refresh Token Support
+- Unit Testing (Test Cases)
+- Publish / Subscribe using Event Emitters
+- Social Logins (Google, Facebook, Apple - Sign In)
+- Phone Number & Email Verification
+- Third Party Service Integration (Twilio, SendGrid, Slack) + Payment Integration
+- Email / SMS Templates
+- CRON Job Scheduling
+
 ## Notes
 
 - Version - 0.0.1
 - Check the Commits for the ChangeLog
+
+## Development
+
+Want to contribute? Great!
+Feel free to raise bugs & PRs.
 
 ## License
 
@@ -93,6 +107,7 @@ MIT
 ## Credits
 
 - https://github.com/V3N0ME/Node-Boilerplate
+- https://github.com/strapi/strapi
 - https://github.com/afteracademy/nodejs-backend-architecture-typescript/
 - https://github.com/aaron5670/ExpressJS-SocketIO-Boilerplate
 - https://scoutapm.com/blog/nodejs-architecture-and-12-best-practices-for-nodejs-development
