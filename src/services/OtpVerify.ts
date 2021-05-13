@@ -1,16 +1,20 @@
 import { Service } from "typedi";
+import UserRepository from "../repository/User";
+
 import OtpVerifyRepository from "../repository/OtpVerify";
 import { otpStatus, otpVerify, otpType } from "../entity/OtpVerify";
 import { User } from "../entity/User";
 
 import { getMinutesBetweenDates, otpGenerator } from "../helpers";
 import SMSService from "../core/sms";
+import JWT from "../core/jwt";
 
 @Service()
 class OtpVerifyService {
   constructor(
     private readonly otpVerifyRepository: OtpVerifyRepository,
-    private readonly smsServiceInstance: SMSService
+    private readonly smsServiceInstance: SMSService,
+    private readonly userRepository: UserRepository
   ) {}
 
   async generateOTP(
@@ -24,7 +28,7 @@ class OtpVerifyService {
       countryCode?: string;
       phoneNumber?: string;
       email?: string;
-      user: User | undefined;
+      user: User;
     }
   ) {
     const otpVerifyId = otpGenerator.generate(16, {
@@ -146,12 +150,20 @@ class OtpVerifyService {
       }
     }
 
+    await this.userRepository.updateUser(otpVerify.user.id, {
+      isPhoneNumberVerified: true,
+    });
+
+    const { id, displayName, email, phoneNumber, imageURL } = otpVerify.user;
+    const jwtPayload = { id, displayName, email, phoneNumber, imageURL };
+    console.log(jwtPayload);
+    const token = await JWT.sign(jwtPayload, 6000);
+
     await this.otpVerifyRepository.updateVerifyOTP(otpVerify.id, {
       status: otpStatus.SUCCESS,
     });
 
-    // @@@ Handle JWT Token
-    return { statusMessage, statusCode };
+    return { statusMessage, statusCode, token };
   }
 }
 

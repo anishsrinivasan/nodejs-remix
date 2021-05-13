@@ -17,7 +17,7 @@ const otpVerifyServiceInstance = Container.get(OtpVerifyService);
 const router = Router();
 
 router.post(
-  "/signin-phonenumber",
+  "/signin-phone-number",
   middlewares.validation(userValidationSchema.signInUserPhoneNumber),
   async (req: Request, res: Response) => {
     try {
@@ -27,6 +27,31 @@ router.post(
         .json(
           successResponse(
             data.statusMessage || "User Sign In Successful",
+            res.statusCode,
+            data
+          )
+        );
+    } catch (err) {
+      logger.error(err);
+      const errResponse = handleRouteCatch(err);
+      return res
+        .status(errResponse.errCode)
+        .json(errorResponse(errResponse.message, res.statusCode));
+    }
+  }
+);
+
+router.post(
+  "/signup-phone-number",
+  middlewares.validation(userValidationSchema.signUpUserPhoneNumber),
+  async (req: Request, res: Response) => {
+    try {
+      const data = await userServiceInstance.signUpPhoneNumber(req.body);
+      return res
+        .status(data.statusCode || 200)
+        .json(
+          successResponse(
+            data.statusMessage || "User Signed Up Successful",
             res.statusCode,
             data
           )

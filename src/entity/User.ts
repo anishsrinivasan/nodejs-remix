@@ -27,6 +27,12 @@ export class User {
   @Column({ default: "" })
   imageURL: string;
 
+  @Column({ default: false })
+  isPhoneNumberVerified: boolean;
+
+  @Column({ default: false })
+  isEmailVerified: boolean;
+
   @CreateDateColumn()
   createdAt: number;
 

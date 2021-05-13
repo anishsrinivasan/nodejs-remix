@@ -7,6 +7,18 @@ const signInUserPhoneNumber = {
   }),
 };
 
+const signUpUserPhoneNumber = {
+  body: Joi.object().keys({
+    countryCode: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    displayName: Joi.string().required(),
+    email: Joi.string()
+      .email()
+      .required()
+      .messages({ "string.any": "Enter a Valid Email" }),
+  }),
+};
+
 const resendOTP = {
   body: Joi.object().keys({
     otpVerifyId: Joi.string().required(),
@@ -88,6 +100,7 @@ const deleteUser = {
 
 export default {
   signInUserPhoneNumber,
+  signUpUserPhoneNumber,
   createUser,
   createUserWithEmail,
   updateUser,

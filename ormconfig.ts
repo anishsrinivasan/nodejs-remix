@@ -9,6 +9,7 @@ export default [
     username: DB_USER,
     password: DB_PASS,
     database: DB_DATABASE,
+    charset: "utf8mb4_unicode_ci", // Allows Emoji
     synchronize: false, // False by Default to Avoid Migration Sync with Entity Changes
     migrationsRun: true,
     logging: false,

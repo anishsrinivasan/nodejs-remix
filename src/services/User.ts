@@ -19,7 +19,7 @@ class UserService {
     phoneNumber: string;
   }) {
     let isRegistered = true,
-      statusMessage = "Please check the OTP",
+      statusMessage = "OTP has been sent successfully, Please Verify!",
       statusCode = 200;
 
     const user = await this.userRepository.getUser({
@@ -32,11 +32,51 @@ class UserService {
       statusMessage = "Sign up to Continue";
     }
 
-    await this.otpVerifyService.generateOTP(otpType.phoneNumber, {
-      countryCode,
-      phoneNumber,
-      user,
+    if (user) {
+      await this.otpVerifyService.generateOTP(otpType.phoneNumber, {
+        countryCode,
+        phoneNumber,
+        user,
+      });
+    }
+
+    return { isRegistered, statusMessage, statusCode };
+  }
+
+  async signUpPhoneNumber(userPayload: User) {
+    let isRegistered = true,
+      statusMessage = "OTP has been sent successfully, Please Verify!",
+      statusCode = 200;
+
+    const { countryCode, phoneNumber } = userPayload;
+
+    let user = await this.userRepository.getUser({
+      countryCode: userPayload.countryCode,
+      phoneNumber: userPayload.phoneNumber,
     });
+
+    if (user) {
+      statusCode = 400;
+      statusMessage = "User Already Registered";
+      return { isRegistered, statusMessage, statusCode };
+    }
+
+    await this.userRepository.createUser(userPayload);
+
+    //@@@ Avoid Getting Data from Repository
+    user = await this.userRepository.getUser({
+      countryCode: userPayload.countryCode,
+      phoneNumber: userPayload.phoneNumber,
+    });
+
+    if (user) {
+      await this.otpVerifyService.generateOTP(otpType.phoneNumber, {
+        countryCode,
+        phoneNumber,
+        user,
+      });
+    }
+
     return { isRegistered, statusMessage, statusCode };
   }
 

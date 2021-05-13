@@ -5,11 +5,11 @@ import { OtpVerification } from "../entity/OtpVerify";
 
 @Service()
 class UserRepository {
-  async getUser(user: any) {
+  async getUser(user: any): Promise<User | undefined> {
     const response = await getRepository(User).findOne({ where: user });
     return response;
   }
-  async getAll() {
+  async getAll(): Promise<User[] | []> {
     const response = await getRepository(User).find();
     return response;
   }
@@ -20,23 +20,16 @@ class UserRepository {
     return { ...user, insertId };
   }
 
-  async updateUser(userId: string, user: User) {
+  async updateUser(userId: string | number, user: Partial<User>): Promise<{}> {
     const response = await getRepository(User).update(userId, user);
     const insertId = response.raw.insertId;
     return { ...user, insertId };
   }
 
-  async deleteUser(userId: string) {
+  async deleteUser(userId: string): Promise<{ isDeleted: boolean }> {
     const response = await getRepository(User).softDelete(userId);
     const isDeleted = response.raw.changedRows > 0 ? true : false;
     return { isDeleted };
-  }
-
-  async verifyOTP(otpVerifyCode: string, otpVerifyId: string) {
-    const response = await getRepository(OtpVerification).findOne({
-      where: { otpVerifyId, otpVerifyCode },
-    });
-    return response;
   }
 }
 

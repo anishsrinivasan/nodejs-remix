@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { jwt as jwtConfig } from "../config";
+import logger from "./logger";
 
 export default {
   sign: (payload: any, expiresIn: string | number) => {
@@ -7,9 +8,10 @@ export default {
       jwt.sign(
         payload,
         jwtConfig.jwtSecret,
-        { expiresIn: expiresIn, algorithm: jwtConfig.jwtAlgorithm },
+        { expiresIn: expiresIn },
         (err, token) => {
           if (err) {
+            logger.error(`JWT_SIGN_IN_ERR ${err}`);
             reject(err);
           } else {
             resolve(token);
