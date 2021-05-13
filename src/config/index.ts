@@ -45,3 +45,11 @@ export const DB = {
   DB_PASS: process.env.DB_PASS || "password",
   DB_DATABASE: process.env.DB_DATABASE || "db",
 };
+
+export const TWILIO = {
+  accountSid: process.env.TWILIO_accountSID || "",
+  authToken: process.env.TWILIO_authToken || "",
+  messagingServiceSid: process.env.TWILIO_messagingServiceSid || "",
+  MESSAGING_SERVICE:
+    process.env.TWILIO_MESSAGING_SERVICE === "true" ? true : false,
+};

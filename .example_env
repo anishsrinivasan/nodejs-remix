@@ -10,3 +10,8 @@ DB_PORT = 3306
 DB_USER = 
 DB_PASS = 
 DB_DATABASE = 
+
+TWILIO_accountSID = 
+TWILIO_authToken =
+TWILIO_messagingServiceSid =
+TWILIO_MESSAGING_SERVICE = false

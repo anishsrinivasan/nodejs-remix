@@ -7,6 +7,18 @@ const signInUserPhoneNumber = {
   }),
 };
 
+const resendOTP = {
+  body: Joi.object().keys({
+    otpVerifyId: Joi.string().required(),
+  }),
+};
+
+const otpVerify = {
+  body: Joi.object().keys({
+    otpVerifyId: Joi.string().required(),
+    otpVerifyCode: Joi.string().required(),
+  }),
+};
 const createUser = {
   body: Joi.object().keys({
     displayName: Joi.string().required(),
@@ -83,4 +95,6 @@ export default {
   verifyResetPassword,
   resetPassword,
   deleteUser,
+  otpVerify,
+  resendOTP,
 };

@@ -3,14 +3,15 @@ import winston, { format } from "winston";
 const getColor = (level: string) => {
   switch (level) {
     case "info":
-      return "";
+      return "\x1b[37m";
+
     case "debug":
       return "\x1b[34m";
 
-    case "warn":
+    case "error":
       return "\x1b[31m";
 
-    case "error":
+    case "warn":
       return "\x1b[33m";
 
     default:
@@ -23,9 +24,13 @@ const formatConsolePrint = (log: any) => {
     return `${getColor(log.level)}${log.level.toUpperCase()} - ${log.message}`;
   }
 
-  return `${getColor(log.level)}${log.level.toUpperCase()} - ${
-    log.message
-  } - ${JSON.stringify(log)}`;
+  if (log.level === "error") {
+    return `${getColor(log.level)}🔥 ${log.level.toUpperCase()} - ${
+      log.message
+    }`;
+  }
+
+  return `${getColor(log.level)}${log.level.toUpperCase()} - ${log.message}`;
 };
 
 const logger = winston.createLogger({

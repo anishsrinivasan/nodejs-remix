@@ -9,10 +9,87 @@ import {
 import userValidationSchema from "./schema";
 import { Container } from "typedi";
 import UserService from "../../../services/User";
+import OtpVerifyService from "../../../services/OtpVerify";
 import logger from "../../../core/logger";
 
 const userServiceInstance = Container.get(UserService);
+const otpVerifyServiceInstance = Container.get(OtpVerifyService);
 const router = Router();
+
+router.post(
+  "/signin-phonenumber",
+  middlewares.validation(userValidationSchema.signInUserPhoneNumber),
+  async (req: Request, res: Response) => {
+    try {
+      const data = await userServiceInstance.signInPhoneNumber(req.body);
+      return res
+        .status(data.statusCode || 200)
+        .json(
+          successResponse(
+            data.statusMessage || "User Sign In Successful",
+            res.statusCode,
+            data
+          )
+        );
+    } catch (err) {
+      logger.error(err);
+      const errResponse = handleRouteCatch(err);
+      return res
+        .status(errResponse.errCode)
+        .json(errorResponse(errResponse.message, res.statusCode));
+    }
+  }
+);
+
+router.post(
+  "/otp-verify",
+  middlewares.validation(userValidationSchema.otpVerify),
+  async (req: Request, res: Response) => {
+    try {
+      const data = await otpVerifyServiceInstance.otpVerify(req.body);
+      return res
+        .status(data.statusCode || 200)
+        .json(
+          successResponse(
+            data.statusMessage || "User Sign In Successful",
+            res.statusCode,
+            data
+          )
+        );
+    } catch (err) {
+      logger.error(err);
+      const errResponse = handleRouteCatch(err);
+      return res
+        .status(errResponse.errCode)
+        .json(errorResponse(errResponse.message, res.statusCode));
+    }
+  }
+);
+
+router.post(
+  "/resend-otp",
+  middlewares.validation(userValidationSchema.resendOTP),
+  async (req: Request, res: Response) => {
+    try {
+      const data = await otpVerifyServiceInstance.resendOTP(req.body);
+      return res
+        .status(data.statusCode || 200)
+        .json(
+          successResponse(
+            data.statusMessage || "Resend OTP Successful",
+            res.statusCode,
+            data
+          )
+        );
+    } catch (err) {
+      logger.error(err);
+      const errResponse = handleRouteCatch(err);
+      return res
+        .status(errResponse.errCode)
+        .json(errorResponse(errResponse.message, res.statusCode));
+    }
+  }
+);
 
 router.get("/:id", async (req: Request, res: Response) => {
   try {

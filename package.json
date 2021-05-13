@@ -1,7 +1,7 @@
 {
-  "name": "node-js-boilerplate",
+  "name": "nodejs-remix",
   "version": "1.0.0",
-  "description": "Node JS Boilerplate",
+  "description": "NodeJS Remix",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,6 +23,7 @@
     "reflect-metadata": "^0.1.13",
     "socket-io": "^1.0.0",
     "socket.io": "^4.0.1",
+    "twilio": "^3.62.0",
     "typedi": "^0.10.0",
     "typeorm": "^0.2.32",
     "typeorm-typedi-extensions": "^0.4.1",

@@ -1,11 +1,12 @@
 import { Service } from "typedi";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
+import { OtpVerification } from "../entity/OtpVerify";
 
 @Service()
 class UserRepository {
-  async getUser(id: string) {
-    const response = await getRepository(User).findOne({ where: { id } });
+  async getUser(user: any) {
+    const response = await getRepository(User).findOne({ where: user });
     return response;
   }
   async getAll() {
@@ -29,6 +30,13 @@ class UserRepository {
     const response = await getRepository(User).softDelete(userId);
     const isDeleted = response.raw.changedRows > 0 ? true : false;
     return { isDeleted };
+  }
+
+  async verifyOTP(otpVerifyCode: string, otpVerifyId: string) {
+    const response = await getRepository(OtpVerification).findOne({
+      where: { otpVerifyId, otpVerifyCode },
+    });
+    return response;
   }
 }
 
