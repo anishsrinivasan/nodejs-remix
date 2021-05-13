@@ -31,7 +31,7 @@ The goal is to make the developer's life easier so that they can focus more on c
 
 ## Tech
 
-NodeJS Remix uses a number of open source projects to work properly:
+NodeJS Remix uses a number of open source projects to work properly.
 
 - Typescript
 - Express
@@ -46,7 +46,9 @@ NodeJS Remix uses a number of open source projects to work properly:
 - SocketIO
 - Winston
 
-And of course NodeJS Remix itself is open source on GitHub.
+### Modules
+
+- Twilio
 
 ## Installation
 
@@ -64,13 +66,6 @@ yarn start
 
 ---
 
-For production environments...
-
-```sh
-npm install --production
-NODE_ENV=production node app
-```
-
 #### Building for source
 
 For production release:
@@ -81,14 +76,15 @@ yarn build
 
 ## Roadmap
 
-- JWT Refresh Token Support
-- Unit Testing (Test Cases)
-- Publish / Subscribe using Event Emitters
-- Social Logins (Google, Facebook, Apple - Sign In)
-- Phone Number & Email Verification
-- Third Party Service Integration (Twilio, SendGrid, Slack) + Payment Integration
-- Email / SMS Templates
-- CRON Job Scheduling
+- [x] Phone Number Verification
+- [ ] Email Verification
+- [ ] JWT Refresh Token Support
+- [ ] Unit Testing (Test Cases)
+- [ ] Publish / Subscribe using Event Emitters
+- [ ] Social Logins (Google, Facebook, Apple - Sign In)
+- [ ] Third Party Service Integration (Twilio, SendGrid, Slack) + Payment Integration
+- [ ] Email / SMS Templates
+- [ ] CRON Job Scheduling
 
 ## Notes
 
