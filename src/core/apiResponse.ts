@@ -5,6 +5,10 @@ export const successResponse = (
   statusCode: number,
   data: any
 ) => {
+  // Strip Duplicate Status Code & Message
+  delete data.statusCode;
+  delete data.statusMessage;
+
   return {
     message,
     error: false,
@@ -13,9 +17,14 @@ export const successResponse = (
   };
 };
 
-export const handleRouteCatch = (err: { errCode: number; message: string }) => {
-  const errCode = err.errCode || 500;
-  const message = err.message || "Something went wrong";
+export const handleRouteCatch = (err: {
+  errCode: number;
+  message: string;
+  statusCode: number;
+  statusMessage: string;
+}) => {
+  const errCode = err.errCode || err.statusCode || 500;
+  const message = err.message || err.statusMessage || "Something went wrong";
   return { errCode, message };
 };
 
@@ -31,18 +40,9 @@ export const errorResponse = (
   statusCode: number,
   data: any = {}
 ) => {
-  // List of common HTTP request code
-  const codes = [200, 201, 400, 401, 404, 403, 422, 500];
-
-  // Get matched code
-  const findCode = codes.find((code) => code == statusCode);
-
-  if (!findCode) statusCode = 500;
-  else statusCode = findCode;
-
   return {
     message,
-    code: statusCode,
+    statusCode,
     error: true,
     data,
   };

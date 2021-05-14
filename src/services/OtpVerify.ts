@@ -74,7 +74,7 @@ class OtpVerifyService {
     if (!otpVerify) {
       statusCode = 401;
       statusMessage = "Verification Code is Incorrect";
-      return { statusMessage, statusCode };
+      throw { statusMessage, statusCode };
     }
 
     if (otpVerify?.resend_attempts > 3) {
@@ -83,7 +83,7 @@ class OtpVerifyService {
       });
       statusCode = 429;
       statusMessage = "Too Many Attempts, Please try Later.";
-      return { statusMessage, statusCode };
+      throw { statusMessage, statusCode };
     }
 
     if (otpVerify.type === otpType.phoneNumber) {
@@ -113,7 +113,7 @@ class OtpVerifyService {
     if (!otpVerify) {
       statusCode = 401;
       statusMessage = "Verification Code is Incorrect";
-      return { statusMessage, statusCode };
+      throw { statusMessage, statusCode };
     }
 
     await this.otpVerifyRepository.updateVerifyOTP(otpVerify.id, {
@@ -131,7 +131,7 @@ class OtpVerifyService {
         if (diffMinutes >= 30) {
           statusCode = 410;
           statusMessage = "OTP Expired, Please Try Again";
-          return { statusMessage, statusCode };
+          throw { statusMessage, statusCode };
         }
 
         break;
@@ -140,13 +140,13 @@ class OtpVerifyService {
       case otpStatus.SUCCESS: {
         statusCode = 401;
         statusMessage = "OTP Verification Failed, Please Try Again";
-        return { statusMessage, statusCode };
+        throw { statusMessage, statusCode };
       }
 
       case otpStatus.TOO_MANY_ATTEMPTS: {
         statusCode = 429;
         statusMessage = "Too Many Requests, Please try Later.";
-        return { statusMessage, statusCode };
+        throw { statusMessage, statusCode };
       }
     }
 
@@ -156,7 +156,6 @@ class OtpVerifyService {
 
     const { id, displayName, email, phoneNumber, imageURL } = otpVerify.user;
     const jwtPayload = { id, displayName, email, phoneNumber, imageURL };
-    console.log(jwtPayload);
     const token = await JWT.sign(jwtPayload, 6000);
 
     await this.otpVerifyRepository.updateVerifyOTP(otpVerify.id, {
