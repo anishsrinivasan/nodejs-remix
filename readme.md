@@ -78,6 +78,7 @@ yarn build
 
 - [x] Phone Number Verification
 - [ ] Email Verification
+- [ ] Enable / Disable Modules with Configuration
 - [ ] JWT Refresh Token Support
 - [ ] Unit Testing (Test Cases)
 - [ ] Publish / Subscribe using Event Emitters
@@ -110,3 +111,7 @@ MIT
 - https://dev.to/arjhun777/video-chatting-and-screen-sharing-with-react-node-webrtc-peerjs-18fg
 - https://github.com/Maheshkumar-Kakade/otp-generator#readme
 - https://github.com/hagopj13/node-express-boilerplate/
+
+## Bugs
+
+- Get All Users Fix;

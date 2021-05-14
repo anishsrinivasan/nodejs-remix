@@ -56,10 +56,10 @@ export class OtpVerification {
   @Column({ default: 0 })
   resend_attempts: number;
 
-  @Column({ default: otpType.phoneNumber })
+  @Column({ type: "enum", enum: otpType, default: otpType.phoneNumber })
   type: otpType;
 
-  @Column({ default: otpStatus.PENDING })
+  @Column({ type: "enum", enum: otpStatus, default: otpStatus.PENDING })
   status: otpStatus;
 
   @CreateDateColumn()
