@@ -1,12 +1,15 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
 } from "typeorm";
 
+@Unique(["countryCode", "phoneNumber"])
+@Unique(["email"])
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()

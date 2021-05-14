@@ -5,9 +5,12 @@ import OtpVerifyRepository from "../repository/OtpVerify";
 import { otpStatus, otpVerify, otpType } from "../entity/OtpVerify";
 import { User } from "../entity/User";
 
+import { ApiError } from "../core/apiResponse";
+
 import { getMinutesBetweenDates, otpGenerator } from "../helpers";
 import SMSService from "../core/sms";
 import JWT from "../core/jwt";
+import httpStatus from "http-status";
 
 @Service()
 class OtpVerifyService {
@@ -64,26 +67,25 @@ class OtpVerifyService {
   }
 
   async resendOTP({ otpVerifyId }: { otpVerifyId: string }) {
-    let statusMessage = "OTP has been re-sent Successfully",
-      statusCode = 200;
-
     const otpVerify = await this.otpVerifyRepository.verifyOTP({
       otpVerifyId,
     });
 
     if (!otpVerify) {
-      statusCode = 401;
-      statusMessage = "Verification Code is Incorrect";
-      throw { statusMessage, statusCode };
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        "Verification ID is Incorrect"
+      );
     }
 
     if (otpVerify?.resend_attempts > 3) {
       await this.otpVerifyRepository.updateVerifyOTP(otpVerify.id, {
         status: otpStatus.TOO_MANY_ATTEMPTS,
       });
-      statusCode = 429;
-      statusMessage = "Too Many Attempts, Please try Later.";
-      throw { statusMessage, statusCode };
+      throw new ApiError(
+        httpStatus.TOO_MANY_REQUESTS,
+        "Too Many Attempts, Please try Later."
+      );
     }
 
     if (otpVerify.type === otpType.phoneNumber) {
@@ -98,22 +100,20 @@ class OtpVerifyService {
       resend_attempts: otpVerify.resend_attempts + 1,
     });
 
-    return { statusCode, statusMessage };
+    return;
   }
 
   async otpVerify({ otpVerifyId, otpVerifyCode }: otpVerify) {
-    let statusMessage = "OTP Verified Successfully",
-      statusCode = 200;
-
     const otpVerify = await this.otpVerifyRepository.verifyOTP({
       otpVerifyId,
       otpVerifyCode,
     });
 
     if (!otpVerify) {
-      statusCode = 401;
-      statusMessage = "Verification Code is Incorrect";
-      throw { statusMessage, statusCode };
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        "Verification Code is Incorrect"
+      );
     }
 
     await this.otpVerifyRepository.updateVerifyOTP(otpVerify.id, {
@@ -129,24 +129,24 @@ class OtpVerifyService {
 
         // EXPIRE IF MORE THAN 30 MINUTES
         if (diffMinutes >= 30) {
-          statusCode = 410;
-          statusMessage = "OTP Expired, Please Try Again";
-          throw { statusMessage, statusCode };
+          throw new ApiError(httpStatus.GONE, "OTP Expired, Please Try Again");
         }
 
         break;
       }
 
       case otpStatus.SUCCESS: {
-        statusCode = 401;
-        statusMessage = "OTP Verification Failed, Please Try Again";
-        throw { statusMessage, statusCode };
+        throw new ApiError(
+          httpStatus.UNAUTHORIZED,
+          "OTP Verification Failed, Please Try Again"
+        );
       }
 
       case otpStatus.TOO_MANY_ATTEMPTS: {
-        statusCode = 429;
-        statusMessage = "Too Many Requests, Please try Later.";
-        throw { statusMessage, statusCode };
+        throw new ApiError(
+          httpStatus.TOO_MANY_REQUESTS,
+          "Too Many Attemps, Please try Later."
+        );
       }
     }
 
@@ -162,7 +162,7 @@ class OtpVerifyService {
       status: otpStatus.SUCCESS,
     });
 
-    return { statusMessage, statusCode, token };
+    return { token };
   }
 }
 

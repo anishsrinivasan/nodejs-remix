@@ -3,6 +3,8 @@ import UserRepository from "../repository/User";
 import { User } from "../entity/User";
 import { otpType } from "../entity/OtpVerify";
 import OtpVerifyService from "../services/OtpVerify";
+import { ApiError } from "../core/apiResponse";
+import httpStatus from "http-status";
 
 @Service()
 class UserService {
@@ -20,7 +22,7 @@ class UserService {
   }) {
     let isRegistered = true,
       statusMessage = "OTP has been sent successfully, Please Verify!",
-      statusCode = 200;
+      statusCode = httpStatus.OK;
 
     const user = await this.userRepository.getUser({
       countryCode,
@@ -44,10 +46,6 @@ class UserService {
   }
 
   async signUpPhoneNumber(userPayload: User) {
-    let isRegistered = true,
-      statusMessage = "OTP has been sent successfully, Please Verify!",
-      statusCode = 200;
-
     const { countryCode, phoneNumber } = userPayload;
 
     let user = await this.userRepository.getUser({
@@ -56,9 +54,7 @@ class UserService {
     });
 
     if (user) {
-      statusCode = 400;
-      statusMessage = "User Already Registered";
-      return { isRegistered, statusMessage, statusCode };
+      throw new ApiError(httpStatus.NOT_ACCEPTABLE, "User Already Registered");
     }
 
     await this.userRepository.createUser(userPayload);
@@ -77,15 +73,26 @@ class UserService {
       });
     }
 
-    return { isRegistered, statusMessage, statusCode };
+    return;
   }
 
   async getUser(userId: string) {
-    return await this.userRepository.getUser({ id: userId });
+    const data = await this.userRepository.getUser({ id: userId });
+
+    if (!data) {
+      throw new ApiError(404, "User not found");
+    }
+
+    return data;
   }
 
   async getAll() {
-    return await this.userRepository.getAll();
+    const data = await this.userRepository.getAll();
+
+    if (data.length < 1) {
+      throw new ApiError(404, "Users not found");
+    }
+    return data;
   }
 
   async createUser(user: User) {
@@ -95,13 +102,18 @@ class UserService {
   async updateUser(userId: string, user: User) {
     const currentUser = await this.userRepository.getUser(userId);
     if (!currentUser) {
-      throw { code: 400, message: "User Not Found" };
+      throw new ApiError(400, "User Not Found");
     }
     return await this.userRepository.updateUser(userId, user);
   }
 
   async deleteUser(userId: string) {
-    return await this.userRepository.deleteUser(userId);
+    const response = await this.userRepository.deleteUser(userId);
+    if (!response.isDeleted) {
+      throw new ApiError(404, "User Not Found, Delete Failed");
+    }
+
+    return response;
   }
 }
 

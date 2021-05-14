@@ -1,6 +1,7 @@
 import jwt from "../core/jwt";
 import { NextFunction, Request, Response } from "express";
 import { errorResponse } from "../core/apiResponse";
+import httpStatus from "http-status";
 
 const getTokenFromHeader = (req: Request) => {
   /**
@@ -20,10 +21,11 @@ const getTokenFromHeader = (req: Request) => {
 
 const isAuth = () => async (req: any, res: Response, next: NextFunction) => {
   try {
-    // const token = req.headers["x-access-token"];
     const token = getTokenFromHeader(req);
     if (!token) {
-      res.status(403).json(errorResponse("Access Denied", res.statusCode));
+      res
+        .status(httpStatus.FORBIDDEN)
+        .json(errorResponse("Access Denied", res.statusCode));
       res.end();
       return;
     }
@@ -33,7 +35,7 @@ const isAuth = () => async (req: any, res: Response, next: NextFunction) => {
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       res
-        .status(403)
+        .status(httpStatus.FORBIDDEN)
         .json(
           errorResponse("Token Expired, Please try again.", res.statusCode)
         );
@@ -42,7 +44,9 @@ const isAuth = () => async (req: any, res: Response, next: NextFunction) => {
       return;
     }
 
-    res.status(403).json(errorResponse("Access Denied", res.statusCode));
+    res
+      .status(httpStatus.FORBIDDEN)
+      .json(errorResponse("Access Denied", res.statusCode));
     res.end();
     return;
   }

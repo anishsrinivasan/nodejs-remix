@@ -3,7 +3,7 @@ import * as bodyParser from "body-parser";
 import cors from "cors";
 import routesV1 from "../routes/v1";
 import logger from "../core/logger";
-
+import { errorHandler } from "../core/apiResponse";
 declare global {
   namespace Express {
     interface Request {
@@ -23,6 +23,7 @@ export default async ({ app }: { app: express.Application }) => {
   );
   app.use(cors());
   app.use("/v1", routesV1);
+  app.use(errorHandler);
   logger.info("Express Initialized");
 
   return app;

@@ -1,16 +1,13 @@
 import { Request, Response, Router } from "express";
 import middlewares from "../../../middlewares";
-import {
-  successResponse,
-  errorResponse,
-  handleRouteCatch,
-} from "../../../core/apiResponse";
+import { successResponse } from "../../../core/apiResponse";
 
 import userValidationSchema from "./schema";
 import { Container } from "typedi";
 import UserService from "../../../services/User";
 import OtpVerifyService from "../../../services/OtpVerify";
-import logger from "../../../core/logger";
+import { catchAsync } from "../../../helpers";
+import httpStatus from "http-status";
 
 const userServiceInstance = Container.get(UserService);
 const otpVerifyServiceInstance = Container.get(OtpVerifyService);
@@ -19,223 +16,116 @@ const router = Router();
 router.post(
   "/signin-phone-number",
   middlewares.validation(userValidationSchema.signInUserPhoneNumber),
-  async (req: Request, res: Response) => {
-    try {
-      const data = await userServiceInstance.signInPhoneNumber(req.body);
-      return res
-        .status(data.statusCode || 200)
-        .json(
-          successResponse(
-            data.statusMessage || "User Sign In Successful",
-            res.statusCode,
-            data
-          )
-        );
-    } catch (err) {
-      logger.error(err);
-      const errResponse = handleRouteCatch(err);
-      return res
-        .status(errResponse.errCode)
-        .json(errorResponse(errResponse.message, res.statusCode));
-    }
-  }
+  catchAsync(async (req: Request, res: Response) => {
+    const data = await userServiceInstance.signInPhoneNumber(req.body);
+    return res
+      .status(data.statusCode || httpStatus.OK)
+      .json(
+        successResponse(
+          data.statusMessage || "User Sign In Successful",
+          res.statusCode,
+          data
+        )
+      );
+  })
 );
 
 router.post(
   "/signup-phone-number",
   middlewares.validation(userValidationSchema.signUpUserPhoneNumber),
-  async (req: Request, res: Response) => {
-    try {
-      const data = await userServiceInstance.signUpPhoneNumber(req.body);
-      return res
-        .status(data.statusCode || 200)
-        .json(
-          successResponse(
-            data.statusMessage || "User Signed Up Successful",
-            res.statusCode,
-            data
-          )
-        );
-    } catch (err) {
-      logger.error(err);
-      const errResponse = handleRouteCatch(err);
-      return res
-        .status(errResponse.errCode)
-        .json(errorResponse(errResponse.message, res.statusCode));
-    }
-  }
+  catchAsync(async (req: Request, res: Response) => {
+    const data = await userServiceInstance.signUpPhoneNumber(req.body);
+    return res
+      .status(httpStatus.OK)
+      .json(
+        successResponse(
+          "OTP has been sent successfully, Please Verify.",
+          res.statusCode,
+          data
+        )
+      );
+  })
 );
 
 router.post(
   "/otp-verify",
   middlewares.validation(userValidationSchema.otpVerify),
-  async (req: Request, res: Response) => {
-    try {
-      const data = await otpVerifyServiceInstance.otpVerify(req.body);
-      return res
-        .status(data.statusCode || 200)
-        .json(
-          successResponse(
-            data.statusMessage || "User Sign In Successful",
-            res.statusCode,
-            data
-          )
-        );
-    } catch (err) {
-      logger.error(err);
-      const errResponse = handleRouteCatch(err);
-      return res
-        .status(errResponse.errCode)
-        .json(errorResponse(errResponse.message, res.statusCode));
-    }
-  }
+  catchAsync(async (req: Request, res: Response) => {
+    const data = await otpVerifyServiceInstance.otpVerify(req.body);
+    return res
+      .status(httpStatus.OK)
+      .json(successResponse("OTP Verified Successfully", res.statusCode, data));
+  })
 );
 
 router.post(
   "/resend-otp",
   middlewares.validation(userValidationSchema.resendOTP),
-  async (req: Request, res: Response) => {
-    try {
-      const data = await otpVerifyServiceInstance.resendOTP(req.body);
-      return res
-        .status(data.statusCode || 200)
-        .json(
-          successResponse(
-            data.statusMessage || "Resend OTP Successful",
-            res.statusCode,
-            data
-          )
-        );
-    } catch (err) {
-      logger.error(err);
-      const errResponse = handleRouteCatch(err);
-      return res
-        .status(errResponse.errCode)
-        .json(errorResponse(errResponse.message, res.statusCode));
-    }
-  }
+  catchAsync(async (req: Request, res: Response) => {
+    const data = await otpVerifyServiceInstance.resendOTP(req.body);
+    return res
+      .status(httpStatus.OK)
+      .json(successResponse("Resend OTP Successful", res.statusCode, data));
+  })
 );
 
-router.get("/:id", async (req: Request, res: Response) => {
-  try {
+router.get(
+  "/:id",
+  catchAsync(async (req: Request, res: Response) => {
     const params = req.params;
     const data = await userServiceInstance.getUser(params.id);
 
-    if (!data) {
-      return res
-        .status(404)
-        .json(successResponse("User Not Found", res.statusCode, {}));
-    }
-
     return res
-      .status(200)
+      .status(httpStatus.OK)
       .json(successResponse("Users Found Successfully", res.statusCode, data));
-  } catch (err) {
-    logger.error(err);
-    const errResponse = handleRouteCatch(err);
-    return res
-      .status(errResponse.errCode)
-      .json(errorResponse(errResponse.message, res.statusCode));
-  }
-});
+  })
+);
 
-router.get("/", async (req: Request, res: Response) => {
-  try {
+router.get(
+  "/",
+  catchAsync(async (req: Request, res: Response) => {
     const data = await userServiceInstance.getAll();
 
-    if (data.length < 1) {
-      return res
-        .status(404)
-        .json(successResponse("User Not Found", res.statusCode, data));
-    }
-
     return res
-      .status(200)
-      .json(successResponse("User Found Successfully", res.statusCode, data));
-  } catch (err) {
-    logger.error(err);
-    const errResponse = handleRouteCatch(err);
-    return res
-      .status(errResponse.errCode)
-      .json(errorResponse(errResponse.message, res.statusCode));
-  }
-});
+      .status(httpStatus.OK)
+      .json(successResponse("Users Found Successfully", res.statusCode, data));
+  })
+);
 
 router.post(
   "/",
   middlewares.validation(userValidationSchema.createUser),
-  async (req: Request, res: Response) => {
-    try {
-      const data = await userServiceInstance.createUser(req.body);
-      return res
-        .status(201)
-        .json(
-          successResponse("User Created Successfully", res.statusCode, data)
-        );
-    } catch (err) {
-      logger.error(err);
-      const errResponse = handleRouteCatch(err);
-      return res
-        .status(errResponse.errCode)
-        .json(errorResponse(errResponse.message, res.statusCode));
-    }
-  }
+  catchAsync(async (req: Request, res: Response) => {
+    const data = await userServiceInstance.createUser(req.body);
+    return res
+      .status(httpStatus.CREATED)
+      .json(successResponse("User Created Successfully", res.statusCode, data));
+  })
 );
 
 router.put(
   "/:userId",
   middlewares.validation(userValidationSchema.updateUser),
-  async (req: Request, res: Response) => {
-    try {
-      const params = req.params;
-      const data = await userServiceInstance.updateUser(
-        params.userId,
-        req.body
-      );
-      return res
-        .status(201)
-        .json(
-          successResponse("User Updated Successfully", res.statusCode, data)
-        );
-    } catch (err) {
-      logger.error(err);
-      const errResponse = handleRouteCatch(err);
-      return res
-        .status(errResponse.errCode)
-        .json(errorResponse(errResponse.message, res.statusCode));
-    }
-  }
+  catchAsync(async (req: Request, res: Response) => {
+    const params = req.params;
+    const data = await userServiceInstance.updateUser(params.userId, req.body);
+    return res
+      .status(httpStatus.OK)
+      .json(successResponse("User Updated Successfully", res.statusCode, data));
+  })
 );
 
 router.delete(
   "/:userId",
   middlewares.validation(userValidationSchema.deleteUser),
-  async (req: Request, res: Response) => {
-    try {
-      const params = req.params;
-      const data = await userServiceInstance.deleteUser(params.userId);
+  catchAsync(async (req: Request, res: Response) => {
+    const params = req.params;
+    await userServiceInstance.deleteUser(params.userId);
 
-      if (!data.isDeleted) {
-        return res
-          .status(404)
-          .json(
-            errorResponse("User Not Found, Delete Failed", res.statusCode, {})
-          );
-      }
-
-      return res
-        .status(200)
-        .json(
-          successResponse("Users Deleted Successfully", res.statusCode, data)
-        );
-    } catch (err) {
-      logger.error(err);
-      const errResponse = handleRouteCatch(err);
-      return res
-        .status(errResponse.errCode)
-        .json(errorResponse(errResponse.message, res.statusCode));
-    }
-  }
+    return res
+      .status(httpStatus.OK)
+      .json(successResponse("Users Deleted Successfully", res.statusCode));
+  })
 );
 
 export default router;

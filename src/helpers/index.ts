@@ -1,5 +1,6 @@
 import pick from "./pick";
 import otpGenerator from "./otpGenerator";
+import catchAsync from "./catchAsync";
 
 const getMinutesBetweenDates = (startDate: Date, endDate: Date) => {
   var diff = endDate.getTime() - startDate.getTime();
@@ -20,4 +21,10 @@ const configValidator = (payload: any = {}, keys: string[] = []) => {
   return { isValid, errors };
 };
 
-export { pick, getMinutesBetweenDates, configValidator, otpGenerator };
+export {
+  pick,
+  getMinutesBetweenDates,
+  configValidator,
+  catchAsync,
+  otpGenerator,
+};

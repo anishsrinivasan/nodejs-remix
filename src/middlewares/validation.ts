@@ -2,6 +2,7 @@ import Joi from "joi";
 import { pick } from "../helpers";
 import { NextFunction, Request, Response } from "express";
 import apiResponse from "../core/apiResponse";
+import httpStatus from "http-status";
 
 type ValidationOptions = {
   errorMessage?: string;
@@ -28,7 +29,7 @@ const validation =
           : "Invalid Request | Required Values are Missing";
 
       return res
-        .status(422)
+        .status(httpStatus.BAD_REQUEST)
         .json(
           apiResponse.errorResponse(message, res.statusCode, { errorDetails })
         );
