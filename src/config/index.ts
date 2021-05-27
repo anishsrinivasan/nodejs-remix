@@ -53,3 +53,7 @@ export const TWILIO = {
   MESSAGING_SERVICE:
     process.env.TWILIO_MESSAGING_SERVICE === "true" ? true : false,
 };
+
+export const BULLMQ = {
+  SERVICE: process.env.BULLMQ_SERVICE === "true" ? true : false,
+};
