@@ -3,9 +3,15 @@ import { createConnection } from "typeorm";
 import logger from "../core/logger";
 
 export default ({}) => {
-  createConnection()
-    .then(async (connection) => {
-      logger.info("DB Established Successful");
-    })
-    .catch((error) => logger.error("typeOrmErr", error));
+  return new Promise((resolve, reject) => {
+    createConnection()
+      .then(async (connection) => {
+        logger.info("DB Established Successful");
+        resolve(connection);
+      })
+      .catch((error) => {
+        logger.error("typeOrmErr", error);
+        reject(error);
+      });
+  });
 };

@@ -62,7 +62,7 @@ cp .example_env .env
 yarn start
 ```
 
-**Note: Update Environement Variables after creating .env to avoid Db Connection Error.**
+**Note: Please setup & create a database of your choice & update Environement Variables in .env to avoid Db Connection Error.**
 
 ---
 
@@ -78,14 +78,14 @@ yarn build
 
 - [x] Phone Number Verification
 - [ ] Email Verification
-- [ ] Enable / Disable Modules with Configuration
+- [x] Enable / Disable Modules with Configuration
 - [ ] JWT Refresh Token Support
 - [ ] Unit Testing (Test Cases)
 - [ ] Publish / Subscribe using Event Emitters
 - [ ] Social Logins (Google, Facebook, Apple - Sign In)
 - [ ] Third Party Service Integration (Twilio, SendGrid, Slack) + Payment Integration
 - [ ] Email / SMS Templates
-- [ ] CRON Job Scheduling
+- [x] CRON Job Scheduling
 
 ## Notes
 
@@ -115,3 +115,5 @@ MIT
 ## Bugs
 
 - Get All Users Fix;
+- Change Database name in Configuration
+- Close NodeJS Gracefully

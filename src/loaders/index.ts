@@ -2,6 +2,7 @@ import * as express from "express";
 import expressLoader from "./express";
 import socketLoader from "./socket";
 import typeormLoader from "./typeorm";
+import bullMQLoader from "./bullmq";
 
 import http from "http";
 import https from "https";
@@ -10,7 +11,7 @@ import path from "path";
 import { HTTPS_KEY, HTTPS_CERT, HTTPS_ENABLED } from "./../config";
 import logger from "../core/logger";
 
-export default ({ expressApp }: { expressApp: express.Application }) => {
+export default async ({ expressApp }: { expressApp: express.Application }) => {
   let httpServer;
   if (HTTPS_ENABLED) {
     const httpsOptions = {
@@ -23,7 +24,9 @@ export default ({ expressApp }: { expressApp: express.Application }) => {
   }
 
   logger.info("Default Loaders Initiating \n");
-  typeormLoader({});
+  await typeormLoader({});
+  bullMQLoader({ app: expressApp });
+
   expressLoader({ app: expressApp });
   socketLoader({ httpServer });
   logger.info("Default Loaders Initialized\n");

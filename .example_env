@@ -15,3 +15,5 @@ TWILIO_accountSID =
 TWILIO_authToken =
 TWILIO_messagingServiceSid =
 TWILIO_MESSAGING_SERVICE = false
+
+BULLMQ_SERVICE = false
